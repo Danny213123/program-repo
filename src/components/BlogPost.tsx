@@ -46,16 +46,25 @@ export function BlogPost({ category, slug }: BlogPostProps) {
                 setLoading(true);
                 setError(null);
 
-                const [blogPost, mystHtmlContent] = await Promise.all([
-                    fetchBlogContent(category, slug),
-                    fetchMystBuiltContent(category, slug)
-                ]);
+                const blogPost = await fetchBlogContent(category, slug);
 
-                if (mystHtmlContent) {
-                    blogPost.content = rewriteImageUrlsForProduction(mystHtmlContent);
+                // Check if content is already pre-rendered HTML (starts with HTML tag)
+                const isPrerendered = blogPost.content &&
+                    (blogPost.content.trim().startsWith('<') || blogPost.content.includes('</'));
+
+                if (!isPrerendered) {
+                    // Content is raw markdown - need to render it
+                    const mystHtmlContent = await fetchMystBuiltContent(category, slug);
+
+                    if (mystHtmlContent) {
+                        blogPost.content = rewriteImageUrlsForProduction(mystHtmlContent);
+                    } else {
+                        const rendered = await renderMarkdownContent(blogPost.rawContent, category, slug);
+                        blogPost.content = rewriteImageUrlsForProduction(rendered);
+                    }
                 } else {
-                    const rendered = await renderMarkdownContent(blogPost.rawContent, category, slug);
-                    blogPost.content = rewriteImageUrlsForProduction(rendered);
+                    // Content is pre-rendered - just rewrite image URLs
+                    blogPost.content = rewriteImageUrlsForProduction(blogPost.content);
                 }
 
                 // Remove duplicate H1 title from content if present (since we render it in the header)
