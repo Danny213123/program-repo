@@ -31,6 +31,11 @@ export const config = {
   ],
   featuredBlogsCsv: 'blogs/featured-blogs.csv',
   postsPerPage: 12,
+
+  // When true, use bundled content from /blogs/ instead of raw.githubusercontent.com
+  // Set via VITE_USE_LOCAL_CONTENT=true during CI builds
+  useLocalContent: import.meta.env.VITE_USE_LOCAL_CONTENT === 'true',
+
   githubApiBase: 'https://api.github.com',
   githubRawBase: 'https://raw.githubusercontent.com'
 };

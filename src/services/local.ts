@@ -50,20 +50,26 @@ export function getThumbnailUrl(category: string, slug: string, thumbnail: strin
     // Remove leading ./ if present
     const cleanPath = thumbnail.replace(/^\.\//, '');
 
-    // In production, use GitHub raw URLs
+    // Use local bundled content when available
+    if (config.useLocalContent) {
+        // Content is bundled at /blogs/ in the build
+        const baseUrl = `/blogs/${category}/${slug}/`;
+        if (cleanPath.includes('/')) {
+            return `${baseUrl}${cleanPath}`;
+        }
+        return `${baseUrl}images/${cleanPath}`;
+    }
+
+    // Fallback: use GitHub raw URLs
     const isDev = import.meta.env.DEV;
-    const gitHubBase = 'https://raw.githubusercontent.com/ROCm/rocm-blogs/release';
+    const gitHubBase = `https://raw.githubusercontent.com/${config.githubRepo}/${config.githubBranch}`;
     const baseUrl = isDev
         ? `/blogs/${category}/${slug}/`
         : `${gitHubBase}/blogs/${category}/${slug}/`;
 
-    // If path includes a folder prefix (like "images/foo.jpg" or "./images/foo.jpg"), use from blog root
     if (cleanPath.includes('/')) {
         return `${baseUrl}${cleanPath}`;
     }
-
-    // For simple filenames (no path), try blog's local images folder first
-    // This is where most blog thumbnails are stored
     return `${baseUrl}images/${cleanPath}`;
 }
 
