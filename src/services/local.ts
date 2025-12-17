@@ -17,8 +17,28 @@ interface BlogIndex {
     featuredBlogs: string[];
 }
 
+interface PrerenderedBlog {
+    category: string;
+    slug: string;
+    title: string;
+    date: string;
+    author: string;
+    thumbnail: string;
+    tags: string[];
+    description: string;
+    renderedHtml: string;
+    rawContent: string;
+}
+
+interface PrerenderedIndex {
+    generatedAt: string;
+    totalBlogs: number;
+    blogs: PrerenderedBlog[];
+}
+
 // Cache for the blog index
 let cachedIndex: BlogIndex | null = null;
+let cachedPrerendered: PrerenderedIndex | null = null;
 
 /**
  * Load the blog index from public/blogs-index.json
@@ -37,6 +57,25 @@ async function loadBlogIndex(): Promise<BlogIndex> {
         console.error('Error loading blog index:', error);
         console.log('Make sure to run: npm run generate-index');
         throw error;
+    }
+}
+
+/**
+ * Load pre-rendered blog content from public/blogs-prerendered.json
+ */
+async function loadPrerenderedBlogs(): Promise<PrerenderedIndex | null> {
+    if (cachedPrerendered) return cachedPrerendered;
+
+    try {
+        const response = await fetch('/blogs-prerendered.json');
+        if (!response.ok) {
+            return null; // Pre-rendered file may not exist
+        }
+        cachedPrerendered = await response.json();
+        return cachedPrerendered;
+    } catch (error) {
+        console.warn('Pre-rendered blogs not available, falling back to runtime parsing');
+        return null;
     }
 }
 
@@ -155,20 +194,45 @@ export async function fetchFeaturedBlogs(): Promise<string[]> {
 
 /**
  * Fetch full blog content
- * Uses pre-loaded content from blog index for instant loading
+ * Uses pre-rendered HTML for instant loading (no markdown parsing needed)
  */
 export async function fetchBlogContent(category: string, slug: string): Promise<BlogPost> {
-    // First, try to get pre-loaded content from the blog index (instant!)
+    // First, try to get pre-rendered HTML (fastest - no parsing needed!)
+    const prerendered = await loadPrerenderedBlogs();
+    const prerenderedBlog = prerendered?.blogs.find(b => b.category === category && b.slug === slug);
+
+    if (prerenderedBlog) {
+        // Use pre-rendered HTML directly - instant!
+        return {
+            slug,
+            path: `blogs/${category}/${slug}`,
+            category,
+            title: prerenderedBlog.title,
+            date: prerenderedBlog.date,
+            author: prerenderedBlog.author,
+            thumbnail: prerenderedBlog.thumbnail,
+            thumbnailUrl: prerenderedBlog.thumbnail ? getThumbnailUrl(category, slug, prerenderedBlog.thumbnail) : undefined,
+            thumbnailAltUrls: prerenderedBlog.thumbnail ? getAlternateThumbnailUrls(category, slug, prerenderedBlog.thumbnail) : undefined,
+            tags: prerenderedBlog.tags,
+            description: prerenderedBlog.description,
+            language: 'English',
+            verticals: [],
+            content: prerenderedBlog.renderedHtml,
+            rawContent: prerenderedBlog.rawContent
+        };
+    }
+
+    // Fallback: try to get raw content from the blog index
     const index = await loadBlogIndex();
     const blogMeta = index.blogs.find(b => b.category === category && b.slug === slug);
 
     let rawContent: string;
 
     if (blogMeta?.rawContent) {
-        // Content is pre-loaded in the index - instant!
+        // Content is pre-loaded in the index
         rawContent = blogMeta.rawContent;
     } else {
-        // Fallback: fetch from network
+        // Final fallback: fetch from network
         let readmePath: string;
         if (config.useLocalContent) {
             readmePath = `/blogs/${category}/${slug}/README.md`;

@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "npm run generate-index && vite",
     "dev:myst": "npm run build:blogs && npm run generate-index && vite",
-    "build": "npm run build:blogs && npm run generate-index && tsc -b && vite build",
+    "build": "npm run build:blogs && npm run generate-index && npm run prerender-blogs && tsc -b && vite build",
     "build:blogs": "npx myst build --html",
     "lint": "eslint .",
     "preview": "vite preview",
     "generate-index": "npx tsx scripts/generate-blog-index.ts",
+    "prerender-blogs": "npx tsx scripts/prerender-blogs.ts",
     "optimize-thumbnails": "npx tsx scripts/optimize-images.ts"
   },
   "dependencies": {
