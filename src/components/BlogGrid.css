@@ -1,0 +1,28 @@
+.blog-grid-section {
+    margin-bottom: 3rem;
+}
+
+.blog-grid-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem;
+    color: var(--rocm-text);
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.blog-grid-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--rocm-text-muted);
+}
+
+@media (max-width: 768px) {
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+}

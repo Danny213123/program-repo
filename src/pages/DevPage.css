@@ -1,0 +1,496 @@
+/* Developer Page Styles - Full MyST Support */
+.dev-page {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    background: var(--rocm-bg);
+}
+
+.dev-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--rocm-border);
+}
+
+.dev-header h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+    color: var(--rocm-text);
+}
+
+.dev-header p {
+    margin: 0;
+    color: var(--rocm-text-muted);
+    font-size: 0.9rem;
+}
+
+.dev-container {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    min-height: 0;
+}
+
+.dev-editor-panel,
+.dev-preview-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.dev-editor-panel {
+    border-right: 1px solid var(--rocm-border);
+}
+
+.dev-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--rocm-bg-secondary);
+    border-bottom: 1px solid var(--rocm-border);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--rocm-text-muted);
+}
+
+.dev-clear-btn {
+    padding: 0.25rem 0.75rem;
+    background: transparent;
+    border: 1px solid var(--rocm-border);
+    border-radius: 4px;
+    color: var(--rocm-text-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.dev-clear-btn:hover {
+    background: var(--rocm-hover-bg);
+    color: var(--rocm-text);
+}
+
+.dev-editor {
+    flex: 1;
+    width: 100%;
+    padding: 1rem;
+    background: var(--rocm-bg);
+    border: none;
+    color: var(--rocm-text);
+    font-family: var(--rocm-font-mono);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+}
+
+.dev-editor::placeholder {
+    color: var(--rocm-text-muted);
+}
+
+.dev-preview {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    background: var(--rocm-bg);
+    color: var(--rocm-text);
+}
+
+/* Equation Blocks */
+.dev-preview .equation-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--rocm-bg-secondary);
+    border-radius: 4px;
+}
+
+.dev-preview .equation-content {
+    flex: 1;
+    text-align: center;
+    overflow-x: auto;
+}
+
+.dev-preview .equation-number {
+    color: var(--rocm-text-muted);
+    font-size: 0.9rem;
+    margin-left: 1rem;
+    white-space: nowrap;
+}
+
+/* Equation References */
+.dev-preview .eq-ref,
+.dev-preview .cross-ref {
+    color: var(--rocm-link);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--rocm-link);
+}
+
+.dev-preview .eq-ref:hover,
+.dev-preview .cross-ref:hover {
+    border-bottom-style: solid;
+}
+
+.dev-preview .eq-unresolved {
+    color: #ef4444;
+}
+
+/* Typography */
+.dev-preview h1,
+.dev-preview h2,
+.dev-preview h3,
+.dev-preview h4,
+.dev-preview h5,
+.dev-preview h6 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--rocm-text);
+}
+
+.dev-preview h1:first-child,
+.dev-preview h2:first-child {
+    margin-top: 0;
+}
+
+.dev-preview p {
+    margin: 0 0 1rem;
+    line-height: 1.6;
+}
+
+.dev-preview strong {
+    font-weight: 600;
+}
+
+.dev-preview em {
+    font-style: italic;
+}
+
+.dev-preview del {
+    text-decoration: line-through;
+    color: var(--rocm-text-muted);
+}
+
+.dev-preview u {
+    text-decoration: underline;
+}
+
+.dev-preview sub,
+.dev-preview sup {
+    font-size: 0.75em;
+}
+
+/* Code */
+.dev-preview code {
+    background: var(--rocm-code-bg);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-family: var(--rocm-font-mono);
+}
+
+.dev-preview pre {
+    background: var(--rocm-code-bg);
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 0 0 1rem;
+}
+
+.dev-preview pre code {
+    padding: 0;
+    background: transparent;
+}
+
+/* Tables */
+.dev-preview table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.dev-preview th,
+.dev-preview td {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--rocm-border);
+    text-align: left;
+}
+
+.dev-preview th {
+    background: var(--rocm-bg-secondary);
+    font-weight: 600;
+}
+
+/* Admonitions */
+.dev-preview .admonition {
+    padding: 1rem 1rem 1rem 1rem;
+    margin: 1rem 0;
+    border-left: 4px solid var(--rocm-border);
+    background: var(--rocm-bg-secondary);
+    border-radius: 0 4px 4px 0;
+}
+
+.dev-preview .admonition.note {
+    border-left-color: #3b82f6;
+}
+
+.dev-preview .admonition.warning {
+    border-left-color: #f59e0b;
+}
+
+.dev-preview .admonition.important {
+    border-left-color: #8b5cf6;
+}
+
+.dev-preview .admonition.tip {
+    border-left-color: #10b981;
+}
+
+.dev-preview .admonition.caution,
+.dev-preview .admonition.danger,
+.dev-preview .admonition.error {
+    border-left-color: #ef4444;
+}
+
+.dev-preview .admonition.hint,
+.dev-preview .admonition.seealso {
+    border-left-color: #06b6d4;
+}
+
+.dev-preview .admonition.attention {
+    border-left-color: #f97316;
+}
+
+.dev-preview .admonition-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--rocm-text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dev-preview .admonition-content {
+    color: var(--rocm-text);
+}
+
+/* Dropdown */
+.dev-preview details.dropdown {
+    margin: 1rem 0;
+    border: 1px solid var(--rocm-border);
+    border-radius: 4px;
+    background: var(--rocm-bg-secondary);
+}
+
+.dev-preview details.dropdown summary {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--rocm-text);
+    user-select: none;
+}
+
+.dev-preview details.dropdown summary:hover {
+    background: var(--rocm-hover-bg);
+}
+
+.dev-preview details.dropdown .dropdown-content {
+    padding: 0 1rem 1rem;
+}
+
+/* Math Blocks */
+.dev-preview .math-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--rocm-bg-secondary);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.dev-preview .math-content {
+    flex: 1;
+    text-align: center;
+}
+
+.dev-preview .math-number {
+    color: var(--rocm-text-muted);
+    font-size: 0.9rem;
+    margin-left: 1rem;
+}
+
+.dev-preview .math-display {
+    display: block;
+    margin: 1rem 0;
+    text-align: center;
+    overflow-x: auto;
+}
+
+.dev-preview .math-inline {
+    display: inline;
+}
+
+/* Figures */
+.dev-preview figure.figure {
+    margin: 1.5rem 0;
+}
+
+.dev-preview figure.figure.align-center {
+    text-align: center;
+}
+
+.dev-preview figure.figure.align-left {
+    text-align: left;
+}
+
+.dev-preview figure.figure.align-right {
+    text-align: right;
+}
+
+.dev-preview figure.figure img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.dev-preview figure.figure figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--rocm-text-muted);
+}
+
+.dev-preview .figure-label {
+    font-weight: 600;
+}
+
+/* Task Lists */
+.dev-preview ul.task-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 1rem 0;
+}
+
+.dev-preview .task-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+}
+
+.dev-preview .task-item input[type="checkbox"] {
+    margin: 0;
+    width: 1rem;
+    height: 1rem;
+}
+
+.dev-preview .task-item.checked {
+    color: var(--rocm-text-muted);
+    text-decoration: line-through;
+}
+
+/* Footnotes */
+.dev-preview .footnote-ref {
+    font-size: 0.75em;
+}
+
+.dev-preview .footnote-ref a {
+    color: var(--rocm-link);
+    text-decoration: none;
+}
+
+.dev-preview .footnote-sep {
+    margin: 2rem 0 1rem;
+    border: none;
+    border-top: 1px solid var(--rocm-border);
+}
+
+.dev-preview .footnotes {
+    font-size: 0.9rem;
+    color: var(--rocm-text-muted);
+}
+
+.dev-preview .footnote {
+    margin: 0.5rem 0;
+}
+
+/* Definition Lists */
+.dev-preview dl {
+    margin: 1rem 0;
+}
+
+.dev-preview dt {
+    font-weight: 600;
+    color: var(--rocm-text);
+}
+
+.dev-preview dd {
+    margin: 0.25rem 0 0.75rem 1.5rem;
+    color: var(--rocm-text);
+}
+
+/* Blockquotes */
+.dev-preview blockquote {
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    border-left: 4px solid var(--rocm-border);
+    background: var(--rocm-bg-secondary);
+    border-radius: 0 4px 4px 0;
+}
+
+.dev-preview blockquote p {
+    margin: 0;
+}
+
+.dev-preview blockquote cite {
+    display: block;
+    margin-top: 0.5rem;
+    font-style: italic;
+    color: var(--rocm-text-muted);
+}
+
+/* Cross-references */
+.dev-preview .cross-ref {
+    color: var(--rocm-link);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--rocm-link);
+}
+
+.dev-preview .cross-ref:hover {
+    border-bottom-style: solid;
+}
+
+/* Links */
+.dev-preview a {
+    color: var(--rocm-link);
+    text-decoration: none;
+}
+
+.dev-preview a:hover {
+    text-decoration: underline;
+}
+
+/* Processing indicator */
+.dev-processing {
+    font-size: 0.75rem;
+    color: var(--rocm-text-muted);
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dev-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    .dev-editor-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--rocm-border);
+    }
+}

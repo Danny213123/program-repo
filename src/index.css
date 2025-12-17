@@ -1,0 +1,154 @@
+/* ROCm Theme CSS Variables - Black & White */
+:root {
+  /* Colors - Monochrome */
+  --rocm-primary: #1a1a1a;
+  --rocm-primary-hover: #333333;
+
+  /* Fonts */
+  --rocm-font-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --rocm-font-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --rocm-font-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --rocm-font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* AMD Brand Colors */
+  --amd-brand-red: #ED1C24;
+  --amd-red-light: #FEE2E2;
+  /* Light mode background */
+  --amd-red-dark-bg: rgba(237, 28, 36, 0.15);
+  /* Dark mode background */
+  --amd-comment-red: #ff8080;
+  /* For code comments */
+}
+
+/* Dark theme (default) */
+html[data-theme="dark"] {
+  --rocm-bg: #0d1117;
+  --rocm-bg-secondary: #161b22;
+  --rocm-header-bg: rgba(13, 17, 23, 0.95);
+  --rocm-footer-bg: #0d1117;
+  --rocm-card-bg: #161b22;
+  --rocm-hover-bg: rgba(255, 255, 255, 0.05);
+  --rocm-text: #e6edf3;
+  --rocm-text-muted: #8b949e;
+  --rocm-border: rgba(255, 255, 255, 0.1);
+  --rocm-link: #ffffff;
+  --rocm-code-bg: #161b22;
+  --rocm-primary: #ffffff;
+  --rocm-primary-hover: #cccccc;
+  /* Specific Dropdown Style for Dark Mode (Deep HF Dark) */
+  --rocm-dropdown-bg: #0b0f19;
+}
+
+/* Light theme */
+html[data-theme="light"] {
+  --rocm-bg: #ffffff;
+  --rocm-bg-secondary: #f6f8fa;
+  --rocm-header-bg: rgba(255, 255, 255, 0.95);
+  --rocm-footer-bg: #f6f8fa;
+  --rocm-card-bg: #ffffff;
+  --rocm-hover-bg: rgba(0, 0, 0, 0.04);
+  --rocm-text: #1f2328;
+  --rocm-text-muted: #656d76;
+  --rocm-border: rgba(0, 0, 0, 0.1);
+  --rocm-link: #1a1a1a;
+  --rocm-code-bg: #f6f8fa;
+  /* Specific Dropdown Style for Light Mode */
+  --rocm-dropdown-bg: #ffffff;
+}
+
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--rocm-font-base);
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: var(--rocm-bg);
+  color: var(--rocm-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--rocm-link);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--rocm-font-heading);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--rocm-text);
+}
+
+code,
+pre {
+  font-family: var(--rocm-font-mono);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--rocm-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--rocm-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--rocm-text-muted);
+}
+
+/* Selection */
+::selection {
+  background: #1a1a1a;
+  color: white;
+}
+
+/* Page container */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Main content area */
+main {
+  flex: 1;
+}
+
+/* Utility Classes */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

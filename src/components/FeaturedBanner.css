@@ -1,0 +1,332 @@
+/* Clean Minimal Featured Banner */
+.featured-banner {
+    position: relative;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto 40px;
+    padding: 0 1.5rem;
+}
+
+/* Main Slide Area */
+.banner-main {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    background: var(--rocm-bg-secondary, #161b22);
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+/* Individual Slide */
+.banner-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    display: flex;
+    align-items: stretch;
+    pointer-events: none;
+    background: transparent;
+}
+
+.banner-slide.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Content Side (Left) */
+.banner-content {
+    flex: 1;
+    max-width: 55%;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--rocm-card-bg, #161b22);
+}
+
+.banner-category {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    color: #888;
+}
+
+html[data-theme="dark"] .banner-category {
+    color: #aaa;
+}
+
+.banner-title {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 16px;
+    color: #1a1a1a;
+}
+
+html[data-theme="dark"] .banner-title {
+    color: #ffffff;
+}
+
+/* Description */
+.banner-description {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #666;
+    margin: 0 0 20px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+html[data-theme="dark"] .banner-description {
+    color: #999;
+}
+
+/* Button - White border on dark */
+.banner-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: transparent;
+    color: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    width: fit-content;
+}
+
+html[data-theme="dark"] .banner-btn {
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+.banner-btn:hover {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .banner-btn:hover {
+    background: #ffffff;
+    color: #1a1a1a;
+}
+
+.banner-btn::after {
+    content: "→";
+    margin-left: 8px;
+}
+
+/* Image Side (Right) */
+.banner-image {
+    flex: 1;
+    max-width: 45%;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Progress Bar Section - Below image with padding */
+.banner-progress-bar {
+    display: flex;
+    gap: 8px;
+    padding: 16px 0 4px;
+    /* Reduced bottom padding */
+    background: transparent;
+}
+
+.progress-item {
+    flex: 1;
+    height: 3px;
+    position: relative;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    padding: 0;
+}
+
+.progress-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+html[data-theme="light"] .progress-bg {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.progress-item.active .progress-bg {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+html[data-theme="light"] .progress-item.active .progress-bg {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: #ffffff;
+    animation: progressFill 8s linear forwards;
+}
+
+.progress-fill.paused {
+    animation-play-state: paused;
+}
+
+html[data-theme="light"] .progress-fill {
+    background: #1a1a1a;
+}
+
+@keyframes progressFill {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+/* Bottom Navigation - Transparent bg */
+.banner-nav {
+    display: flex;
+    gap: 12px;
+    background: transparent;
+}
+
+/* Nav Item - Transparent */
+.nav-item {
+    flex: 1;
+    position: relative;
+    padding: 8px 16px 16px;
+    /* Reduced top padding */
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    text-align: left;
+    transition: background 0.2s ease;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+html[data-theme="light"] .nav-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.nav-item.active {
+    background: transparent;
+}
+
+html[data-theme="light"] .nav-item.active {
+    background: transparent;
+}
+
+/* Nav Content */
+.nav-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nav-category {
+    font-size: 11px;
+    /* Slightly larger */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888;
+}
+
+html[data-theme="dark"] .nav-category {
+    color: #999;
+}
+
+.nav-title {
+    font-size: 14px;
+    /* Larger font */
+    font-weight: 500;
+    color: #1a1a1a;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+html[data-theme="dark"] .nav-title {
+    color: #e6edf3;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .nav-item:nth-child(n+5) {
+        display: none;
+    }
+
+    .progress-item:nth-child(n+5) {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .banner-main {
+        height: auto;
+    }
+
+    .banner-slide {
+        flex-direction: column;
+        position: relative;
+    }
+
+    .banner-slide:not(.active) {
+        display: none;
+    }
+
+    .banner-content {
+        max-width: 100%;
+        padding: 24px;
+        order: 2;
+    }
+
+    .banner-image {
+        max-width: 100%;
+        height: 200px;
+        order: 1;
+    }
+
+    .banner-title {
+        font-size: 20px;
+    }
+
+    .banner-nav {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .nav-item {
+        padding: 12px 16px;
+    }
+}
