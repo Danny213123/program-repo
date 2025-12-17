@@ -41,6 +41,7 @@ interface BlogMeta {
     date: string;
     author: string;
     thumbnail: string;
+    thumbnailUrl?: string; // Pre-computed at build time
     tags: string[];
     description: string;
     language: string;
@@ -127,6 +128,23 @@ async function parseBlogMeta(readmePath: string, category: string, slug: string)
             verticals = classifyVerticals(tags);
         }
 
+        // Compute thumbnail URL at build time for local paths
+        let thumbnailUrl = '';
+        if (data.thumbnail) {
+            const thumb = data.thumbnail as string;
+            if (thumb.startsWith('http')) {
+                thumbnailUrl = thumb;
+            } else {
+                // Clean path and use local /blogs/ path
+                const cleanPath = thumb.replace(/^\.\//, '');
+                if (cleanPath.includes('/')) {
+                    thumbnailUrl = `/blogs/${category}/${slug}/${cleanPath}`;
+                } else {
+                    thumbnailUrl = `/blogs/${category}/${slug}/images/${cleanPath}`;
+                }
+            }
+        }
+
         const meta: BlogMeta = {
             slug,
             path: `blogs/${category}/${slug}`,
@@ -135,6 +153,7 @@ async function parseBlogMeta(readmePath: string, category: string, slug: string)
             date: data.date || '',
             author: data.author || 'Unknown',
             thumbnail: data.thumbnail || '',
+            thumbnailUrl, // Pre-computed at build time
             tags,
             description,
             language: data.language || 'English',

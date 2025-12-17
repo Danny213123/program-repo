@@ -173,7 +173,8 @@ export async function fetchBlogList(category?: string): Promise<BlogMeta[]> {
 
     let blogs = index.blogs.map(blog => ({
         ...blog,
-        thumbnailUrl: blog.thumbnail ? getThumbnailUrl(blog.category, blog.slug, blog.thumbnail) : undefined,
+        // Use pre-computed thumbnailUrl from index, only compute at runtime if missing
+        thumbnailUrl: blog.thumbnailUrl || (blog.thumbnail ? getThumbnailUrl(blog.category, blog.slug, blog.thumbnail) : undefined),
         thumbnailAltUrls: blog.thumbnail ? getAlternateThumbnailUrls(blog.category, blog.slug, blog.thumbnail) : undefined
     }));
 
@@ -263,40 +264,23 @@ export async function fetchBlogContent(category: string, slug: string): Promise<
         rawContent = await response.text();
     }
 
-    // Handle duplicate fields in YAML frontmatter (gray-matter throws on these)
-    let processedContent = rawContent;
-    const frontmatterMatch = rawContent.match(/^---\n([\s\S]*?)\n---/);
-    if (frontmatterMatch) {
-        const yamlContent = frontmatterMatch[1];
-        const seenKeys = new Set<string>();
-        const deduplicatedLines: string[] = [];
-
-        for (const line of yamlContent.split('\n')) {
-            const keyMatch = line.match(/^([a-zA-Z_][a-zA-Z0-9_]*):/);
-            if (keyMatch) {
-                const key = keyMatch[1];
-                if (seenKeys.has(key)) {
-                    console.warn(`Duplicate frontmatter key "${key}" in ${category}/${slug}, skipping`);
-                    continue;
-                }
-                seenKeys.add(key);
-            }
-            deduplicatedLines.push(line);
-        }
-
-        processedContent = `---\n${deduplicatedLines.join('\n')}\n---${rawContent.slice(frontmatterMatch[0].length)}`;
-    }
-
+    // Parse frontmatter - use js-yaml's json mode to handle duplicate keys gracefully
     let data: Record<string, any> = {};
-    let content = processedContent;
+    let content = rawContent;
 
     try {
-        const parsed = matter(processedContent);
+        // gray-matter with js-yaml's json option allows duplicate keys (last one wins)
+        const yaml = await import('js-yaml');
+        const parsed = matter(rawContent, {
+            engines: {
+                yaml: (s: string) => yaml.load(s, { json: true }) as Record<string, any>
+            }
+        });
         data = parsed.data;
         content = parsed.content;
     } catch (parseError) {
         console.warn(`Frontmatter parsing error for ${category}/${slug}, using raw content:`, parseError);
-        const stripped = processedContent.replace(/^---[\s\S]*?---\n?/, '');
+        const stripped = rawContent.replace(/^---[\s\S]*?---\n?/, '');
         content = stripped;
     }
 
@@ -320,7 +304,7 @@ export async function fetchBlogContent(category: string, slug: string): Promise<
         language: frontmatter.language || 'English',
         verticals: blogMeta?.verticals || [],
         content,
-        rawContent: processedContent
+        rawContent
     };
 }
 
