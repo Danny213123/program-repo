@@ -157,11 +157,17 @@ export async function fetchFeaturedBlogs(): Promise<string[]> {
  * Fetch full blog content
  */
 export async function fetchBlogContent(category: string, slug: string): Promise<BlogPost> {
-    // In production, fetch from GitHub raw URLs to avoid deploying thousands of files
-    const isDev = import.meta.env.DEV;
-    const readmePath = isDev
-        ? `/blogs/${category}/${slug}/README.md`
-        : `https://raw.githubusercontent.com/${config.githubRepo}/${config.githubBranch}/blogs/${category}/${slug}/README.md`;
+    // Use local bundled content when available, otherwise fetch from GitHub
+    let readmePath: string;
+    if (config.useLocalContent) {
+        // Content is bundled at /blogs/ in the build
+        readmePath = `/blogs/${category}/${slug}/README.md`;
+    } else {
+        const isDev = import.meta.env.DEV;
+        readmePath = isDev
+            ? `/blogs/${category}/${slug}/README.md`
+            : `https://raw.githubusercontent.com/${config.githubRepo}/${config.githubBranch}/blogs/${category}/${slug}/README.md`;
+    }
 
     // Try to get from cache first (populated by prefetch worker)
     let response: Response | undefined;
