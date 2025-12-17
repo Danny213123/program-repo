@@ -155,39 +155,49 @@ export async function fetchFeaturedBlogs(): Promise<string[]> {
 
 /**
  * Fetch full blog content
+ * Uses pre-loaded content from blog index for instant loading
  */
 export async function fetchBlogContent(category: string, slug: string): Promise<BlogPost> {
-    // Use local bundled content when available, otherwise fetch from GitHub
-    let readmePath: string;
-    if (config.useLocalContent) {
-        // Content is bundled at /blogs/ in the build
-        readmePath = `/blogs/${category}/${slug}/README.md`;
+    // First, try to get pre-loaded content from the blog index (instant!)
+    const index = await loadBlogIndex();
+    const blogMeta = index.blogs.find(b => b.category === category && b.slug === slug);
+
+    let rawContent: string;
+
+    if (blogMeta?.rawContent) {
+        // Content is pre-loaded in the index - instant!
+        rawContent = blogMeta.rawContent;
     } else {
-        const isDev = import.meta.env.DEV;
-        readmePath = isDev
-            ? `/blogs/${category}/${slug}/README.md`
-            : `https://raw.githubusercontent.com/${config.githubRepo}/${config.githubBranch}/blogs/${category}/${slug}/README.md`;
-    }
+        // Fallback: fetch from network
+        let readmePath: string;
+        if (config.useLocalContent) {
+            readmePath = `/blogs/${category}/${slug}/README.md`;
+        } else {
+            const isDev = import.meta.env.DEV;
+            readmePath = isDev
+                ? `/blogs/${category}/${slug}/README.md`
+                : `https://raw.githubusercontent.com/${config.githubRepo}/${config.githubBranch}/blogs/${category}/${slug}/README.md`;
+        }
 
-    // Try to get from cache first (populated by prefetch worker)
-    let response: Response | undefined;
-    try {
-        const cache = await caches.open('blog-content-v1');
-        response = await cache.match(readmePath);
-    } catch (e) {
-        console.warn('Cache access failed:', e);
-    }
+        // Try cache first
+        let response: Response | undefined;
+        try {
+            const cache = await caches.open('blog-content-v1');
+            response = await cache.match(readmePath);
+        } catch (e) {
+            console.warn('Cache access failed:', e);
+        }
 
-    // Fallback to network if not in cache
-    if (!response) {
-        response = await fetch(readmePath);
-    }
+        if (!response) {
+            response = await fetch(readmePath);
+        }
 
-    if (!response.ok) {
-        throw new Error(`Failed to load blog: ${response.status}`);
-    }
+        if (!response.ok) {
+            throw new Error(`Failed to load blog: ${response.status}`);
+        }
 
-    const rawContent = await response.text();
+        rawContent = await response.text();
+    }
 
     // Handle duplicate fields in YAML frontmatter (gray-matter throws on these)
     let processedContent = rawContent;
@@ -222,7 +232,6 @@ export async function fetchBlogContent(category: string, slug: string): Promise<
         content = parsed.content;
     } catch (parseError) {
         console.warn(`Frontmatter parsing error for ${category}/${slug}, using raw content:`, parseError);
-        // Strip frontmatter manually if parsing fails
         const stripped = processedContent.replace(/^---[\s\S]*?---\n?/, '');
         content = stripped;
     }
@@ -245,7 +254,7 @@ export async function fetchBlogContent(category: string, slug: string): Promise<
         tags,
         description,
         language: frontmatter.language || 'English',
-        verticals: [],
+        verticals: blogMeta?.verticals || [],
         content,
         rawContent: processedContent
     };

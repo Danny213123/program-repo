@@ -12,6 +12,7 @@ export interface BlogMeta {
     description: string;
     language: string;
     verticals: string[];  // Market verticals: AI, HPC, Data Science, Systems, Developers, Robotics
+    rawContent?: string;  // Pre-loaded markdown content for instant loading
 }
 
 export interface BlogPost extends BlogMeta {

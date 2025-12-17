@@ -45,6 +45,7 @@ interface BlogMeta {
     description: string;
     language: string;
     verticals: string[];
+    rawContent?: string; // Pre-loaded markdown for instant loading
 }
 
 interface SearchDocument {
@@ -137,7 +138,8 @@ async function parseBlogMeta(readmePath: string, category: string, slug: string)
             tags,
             description,
             language: data.language || 'English',
-            verticals
+            verticals,
+            rawContent: content // Include full content for instant loading
         };
 
         // Prepare search document (async)
