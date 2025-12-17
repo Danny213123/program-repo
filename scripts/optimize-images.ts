@@ -8,7 +8,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Path to blogs directory
-const BLOGS_DIR = path.resolve(__dirname, '../../rocm-blogs-internal/blogs');
+// In CI: set BLOGS_DIR env var to point to frontend/public/blogs
+// Locally: defaults to rocm-blogs-internal/blogs
+const BLOGS_DIR = process.env.BLOGS_DIR || path.resolve(__dirname, '../../rocm-blogs-internal/blogs');
 
 console.log(`Optimization Script Started`);
 console.log(`Target Directory: ${BLOGS_DIR}`);
