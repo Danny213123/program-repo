@@ -1,6 +1,8 @@
 // Local Blog Service - no external imports needed
 import type { BlogMeta, BlogPost, BlogFrontmatter } from '../types/blog';
 import matter from 'gray-matter';
+// @ts-ignore - js-yaml types are optional
+import * as yaml from 'js-yaml';
 import { config } from '../config';
 
 /**
@@ -270,10 +272,9 @@ export async function fetchBlogContent(category: string, slug: string): Promise<
 
     try {
         // gray-matter with js-yaml's json option allows duplicate keys (last one wins)
-        const yaml = await import('js-yaml');
         const parsed = matter(rawContent, {
             engines: {
-                yaml: (s: string) => yaml.load(s, { json: true }) as Record<string, any>
+                yaml: (s: string) => yaml.load(s, { json: true }) as Record<string, unknown>
             }
         });
         data = parsed.data;
