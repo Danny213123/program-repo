@@ -22,7 +22,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Configuration
-const BLOGS_DIR = path.resolve(__dirname, '../../rocm-blogs-internal/blogs');
+// BLOGS_DIR can be overridden via environment variable, otherwise looks in project root
+const BLOGS_DIR = process.env.BLOGS_DIR || path.resolve(__dirname, '../blogs');
 const OUTPUT_FILE = path.resolve(__dirname, '../public/blogs-index.json');
 const SEARCH_INDEX_FILE = path.resolve(__dirname, '../public/search-index.json');
 const CATEGORIES = [
